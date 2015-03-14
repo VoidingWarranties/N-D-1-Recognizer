@@ -30,7 +30,7 @@ float Path<N>::length() const {
 
 template <int N>
 float Distance(const Path<N>& a, const Path<N>& b) {
-  std::assert (a.size() == b.size());
+  assert (a.size() == b.size());
   float distance = 0;
   for (std::size_t i = 0; i < a.size(); ++i) {
     distance += Distance(a[i], b[i]);
