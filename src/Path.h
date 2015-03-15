@@ -45,6 +45,7 @@ Path<N> Path<N>::resample(int n) const {
   Path<N> resampled;
   resampled.addPoint(points_[0]);
   float I = length() / (n - 1);
+  assert (I > 0);
   float D = 0;
   std::deque<Point<N> > points(points_.begin(), points_.end());
 
