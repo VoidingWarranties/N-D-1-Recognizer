@@ -24,6 +24,7 @@ class Path {
   void boundingBox(Point<N>& minCorner, Point<N>& maxCorner) const;
   Path<N> scale(float scale_size) const;
   Path<N> translateCentroidTo(const Point<N>& p) const;
+  void clear() { points_.clear(); }
 
   friend std::ostream& operator<<(std::ostream& out, const Path<N>& p) {
     for (const auto& point : p.points_) {
