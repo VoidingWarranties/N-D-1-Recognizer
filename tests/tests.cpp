@@ -96,6 +96,11 @@ void TestPaths() {
     Path<1> scaled_a = a.scale(100);
     assert(scaled_a[0][0] == 0 && scaled_a[1][0] == 100);
 
+    Point<1> origin;
+    origin[0] = 0;
+    Path<1> translated_a = a.translateCentroidTo(origin);
+    assert (translated_a[0][0] == -0.5 && translated_a[1][0] == 0.5);
+
     for (int n : {2, 10, 64}) {
       Path<1> resampled_a = a.resample(n);
       assert(resampled_a.size() == n);
@@ -143,5 +148,11 @@ void TestPaths() {
     Path<2> scaled_a = a.scale(100);
     assert (scaled_a[0][0] == 0 && scaled_a[0][1] == 0);
     assert (scaled_a[1][0] == 100 && scaled_a[1][1] == 100);
+
+    Point<2> origin;
+    origin[0] = origin[1] = 0;
+    Path<2> translated_a = a.translateCentroidTo(origin);
+    assert (translated_a[0][0] == -0.5 && translated_a[0][1] == -0.5);
+    assert (translated_a[1][0] == 0.5 && translated_a[1][1] == 0.5);
   }
 }

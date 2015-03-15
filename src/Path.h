@@ -21,6 +21,7 @@ class Path {
   Point<N> centroid() const;
   void boundingBox(Point<N>& minCorner, Point<N>& maxCorner) const;
   Path<N> scale(float scale_size) const;
+  Path<N> translateCentroidTo(const Point<N>& p) const;
 
   friend std::ostream& operator<<(std::ostream& out, const Path<N>& p) {
     for (const auto& point : p.points_) {
@@ -104,7 +105,7 @@ void Path<N>::boundingBox(Point<N>& minCorner, Point<N>& maxCorner) const {
     maxCorner[i] = -1 * std::numeric_limits<float>::max();
   }
   for (const auto& point : points_) {
-    for (size_t i = 0; i < N; ++i) {
+    for (std::size_t i = 0; i < N; ++i) {
       if (point[i] < minCorner[i]) {
         minCorner[i] = point[i];
       }
@@ -122,12 +123,26 @@ Path<N> Path<N>::scale(float scale_size) const {
   boundingBox(min, max);
   for (const auto& point : points_) {
     Point<N> scaled_point;
-    for (size_t i = 0; i < N; ++i) {
+    for (std::size_t i = 0; i < N; ++i) {
       scaled_point[i] = point[i] * scale_size / (max[i] - min[i]);
     }
     scaled_path.addPoint(scaled_point);
   }
   return scaled_path;
+}
+
+template <int N>
+Path<N> Path<N>::translateCentroidTo(const Point<N>& p) const {
+  Path<N> translated_path;
+  Point<N> c = centroid();
+  for (const auto& point : points_) {
+    Point<N> translated_point;
+    for (std::size_t i = 0; i < N; ++i) {
+      translated_point[i] = point[i] + p[i] - c[i];
+    }
+    translated_path.addPoint(translated_point);
+  }
+  return translated_path;
 }
 
 template <int N>
