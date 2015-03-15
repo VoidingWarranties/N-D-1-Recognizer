@@ -8,7 +8,7 @@
 #include "Point.h"
 #include "Utility.h"
 
-namespace ND$1Recognizer {
+namespace NDRecognizer {
 template <int N>
 class Path {
  public:

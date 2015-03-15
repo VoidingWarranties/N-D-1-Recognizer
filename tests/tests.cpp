@@ -5,7 +5,7 @@
 #include "../src/Path.h"
 #include "../src/Utility.h"
 
-using namespace ND$1Recognizer;
+using namespace NDRecognizer;
 
 void TestPoints();
 void TestPaths();

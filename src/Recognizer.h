@@ -4,7 +4,7 @@
 #include <map>
 #include "Path.h"
 
-namespace ND$1Recognizer {
+namespace NDRecognizer {
 template <int N>
 class Recognizer {
  public:

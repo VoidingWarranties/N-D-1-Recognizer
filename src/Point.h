@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cmath>
 
-namespace ND$1Recognizer {
+namespace NDRecognizer {
 template <int N>
 class Point {
  public:

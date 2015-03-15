@@ -8,7 +8,7 @@
 
 #include <Carbon/Carbon.h>
 
-using namespace ND$1Recognizer;
+using namespace NDRecognizer;
 
 std::atomic_bool flag(true);
 
@@ -27,6 +27,7 @@ Path<2> GetPath() {
     p[1] = cursor.y;
     path.addPoint(p);
     CFRelease(event);
+    // Sleep so that we don't add a bajillion points to the path.
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
   flag = true;
