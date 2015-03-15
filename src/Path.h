@@ -40,7 +40,7 @@ float Path<N>::length() const {
 
 template <int N>
 Path<N> Path<N>::resample(int n) const {
-  assert (points_.size() > 0);
+  assert (points_.size() > 1);
   assert (n > 1);
   Path<N> resampled;
   resampled.addPoint(points_[0]);
