@@ -4,12 +4,7 @@
 #include <limits>
 #include "../src/Point.h"
 #include "../src/Path.h"
-
-#define EPSILON std::numeric_limits<float>::epsilon()
-
-bool AlmostEquals(float a, float b) {
-  return (std::fabs(a - b) < EPSILON);
-}
+#include "../src/Utility.h"
 
 using namespace ND$1Recognizer;
 
@@ -88,6 +83,16 @@ void TestPaths() {
     assert (a.size() == 2);
     assert (a.length() == 1);
     assert (c.length() == 0);
+
+    for (int n : {2, 10, 64}) {
+      Path<1> resampled_a = a.resample(n);
+      assert(resampled_a.size() == n);
+      float expected_value = 0;
+      for (std::size_t i = 0; i < n; ++i) {
+        assert(AlmostEquals(resampled_a[i][0], expected_value));
+        expected_value += 1.f / (n - 1);
+      }
+    }
   }
   // 2D path.
   {
@@ -98,5 +103,17 @@ void TestPaths() {
     p[0] = p[1] = 1;
     b.addPoint(p);
     assert (AlmostEquals(Distance(a, b), std::sqrt(2)));
+
+    a.addPoint(p);
+    for (int n : {2, 10, 64}) {
+      Path<2> resampled_a = a.resample(n);
+      assert(resampled_a.size() == n);
+      float expected_value = 0;
+      for (std::size_t i = 0; i < n; ++i) {
+        assert(AlmostEquals(resampled_a[i][0], expected_value));
+        assert(AlmostEquals(resampled_a[i][1], expected_value));
+        expected_value += 1.f / (n - 1);
+      }
+    }
   }
 }
