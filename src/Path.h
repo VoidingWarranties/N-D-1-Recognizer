@@ -4,6 +4,7 @@
 #include <deque>
 #include <cstddef>
 #include <cassert>
+#include <limits>
 #include "Point.h"
 #include "Utility.h"
 
@@ -18,6 +19,7 @@ class Path {
   Point<N>& operator[](std::size_t i) { return points_[i]; }
   Path<N> resample(int n) const;
   Point<N> centroid() const;
+  void boundingBox(Point<N>& minCorner, Point<N>& maxCorner);
 
   friend std::ostream& operator<<(std::ostream& out, const Path<N>& p) {
     for (const auto& point : p.points_) {
@@ -90,6 +92,26 @@ Point<N> Path<N>::centroid() const {
     }
   }
   return centroid_point;
+}
+
+template <int N>
+void Path<N>::boundingBox(Point<N>& minCorner, Point<N>& maxCorner) {
+  assert (points_.size() > 0);
+  for (size_t i = 0; i < N; ++i) {
+    minCorner[i] = std::numeric_limits<float>::max();
+    // TODO: is there a better min value for floats?
+    maxCorner[i] = -1 * std::numeric_limits<float>::max();
+  }
+  for (const auto& point : points_) {
+    for (size_t i = 0; i < N; ++i) {
+      if (point[i] < minCorner[i]) {
+        minCorner[i] = point[i];
+      }
+      if (point[i] > maxCorner[i]) {
+        maxCorner[i] = point[i];
+      }
+    }
+  }
 }
 
 template <int N>

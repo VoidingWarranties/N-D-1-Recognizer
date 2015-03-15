@@ -1,7 +1,6 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
-#include <limits>
 #include "../src/Point.h"
 #include "../src/Path.h"
 #include "../src/Utility.h"
@@ -72,6 +71,10 @@ void TestPaths() {
     assert (a.length() == 0);
     assert (Distance(a, b) == 0);
 
+    Point<1> min, max;
+    a.boundingBox(min, max);
+    assert (min[0] == 0 && max[0] == 0);
+
     Path<1> c;
     p[0] = 1;
     c.addPoint(p);
@@ -84,14 +87,23 @@ void TestPaths() {
     assert (a.length() == 1);
     assert (c.length() == 0);
 
+    a.boundingBox(min, max);
+    assert (min[0] == 0 && max[0] == 1);
+
+    c.boundingBox(min, max);
+    assert (min[0] == 1 && max[0] == 1);
+
     for (int n : {2, 10, 64}) {
       Path<1> resampled_a = a.resample(n);
       assert(resampled_a.size() == n);
       float expected_value = 0;
       for (std::size_t i = 0; i < n; ++i) {
-        assert(AlmostEquals(resampled_a[i][0], expected_value));
+        assert (AlmostEquals(resampled_a[i][0], expected_value));
         expected_value += 1.f / (n - 1);
       }
+
+      a.boundingBox(min, max);
+      assert (min[0] == 0 && max[0] == 1);
     }
   }
   // 2D path.
@@ -104,6 +116,11 @@ void TestPaths() {
     b.addPoint(p);
     assert (AlmostEquals(Distance(a, b), std::sqrt(2)));
 
+    Point<2> min, max;
+    a.boundingBox(min, max);
+    assert (min[0] == 0 && min[1] == 0);
+    assert (max[0] == 0 && max[1] == 0);
+
     a.addPoint(p);
     for (int n : {2, 10, 64}) {
       Path<2> resampled_a = a.resample(n);
@@ -115,5 +132,9 @@ void TestPaths() {
         expected_value += 1.f / (n - 1);
       }
     }
+
+    a.boundingBox(min, max);
+    assert (min[0] == 0 && min[1] == 0);
+    assert (max[0] == 1 && max[1] == 1);
   }
 }
