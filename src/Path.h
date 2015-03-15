@@ -61,6 +61,11 @@ Path<N> Path<N>::resample(int n) const {
       points.pop_front();
     }
   }
+  // This is a kludge to fix a bug where the last point is not always added to
+  // the resampled path.
+  if (resampled.size() != n) {
+    resampled.addPoint(points_.back());
+  }
   return resampled;
 }
 
