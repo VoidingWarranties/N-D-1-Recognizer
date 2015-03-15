@@ -93,6 +93,9 @@ void TestPaths() {
     c.boundingBox(min, max);
     assert (min[0] == 1 && max[0] == 1);
 
+    Path<1> scaled_a = a.scale(100);
+    assert(scaled_a[0][0] == 0 && scaled_a[1][0] == 100);
+
     for (int n : {2, 10, 64}) {
       Path<1> resampled_a = a.resample(n);
       assert(resampled_a.size() == n);
@@ -136,5 +139,9 @@ void TestPaths() {
     a.boundingBox(min, max);
     assert (min[0] == 0 && min[1] == 0);
     assert (max[0] == 1 && max[1] == 1);
+
+    Path<2> scaled_a = a.scale(100);
+    assert (scaled_a[0][0] == 0 && scaled_a[0][1] == 0);
+    assert (scaled_a[1][0] == 100 && scaled_a[1][1] == 100);
   }
 }

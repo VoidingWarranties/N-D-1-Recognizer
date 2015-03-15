@@ -20,6 +20,7 @@ class Path {
   Path<N> resample(int n) const;
   Point<N> centroid() const;
   void boundingBox(Point<N>& minCorner, Point<N>& maxCorner) const;
+  Path<N> scale(float scale_size) const;
 
   friend std::ostream& operator<<(std::ostream& out, const Path<N>& p) {
     for (const auto& point : p.points_) {
@@ -112,6 +113,21 @@ void Path<N>::boundingBox(Point<N>& minCorner, Point<N>& maxCorner) const {
       }
     }
   }
+}
+
+template <int N>
+Path<N> Path<N>::scale(float scale_size) const {
+  Path<N> scaled_path;
+  Point<N> min, max;
+  boundingBox(min, max);
+  for (const auto& point : points_) {
+    Point<N> scaled_point;
+    for (size_t i = 0; i < N; ++i) {
+      scaled_point[i] = point[i] * scale_size / (max[i] - min[i]);
+    }
+    scaled_path.addPoint(scaled_point);
+  }
+  return scaled_path;
 }
 
 template <int N>
