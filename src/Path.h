@@ -19,7 +19,7 @@ class Path {
   Point<N>& operator[](std::size_t i) { return points_[i]; }
   Path<N> resample(int n) const;
   Point<N> centroid() const;
-  void boundingBox(Point<N>& minCorner, Point<N>& maxCorner);
+  void boundingBox(Point<N>& minCorner, Point<N>& maxCorner) const;
 
   friend std::ostream& operator<<(std::ostream& out, const Path<N>& p) {
     for (const auto& point : p.points_) {
@@ -95,7 +95,7 @@ Point<N> Path<N>::centroid() const {
 }
 
 template <int N>
-void Path<N>::boundingBox(Point<N>& minCorner, Point<N>& maxCorner) {
+void Path<N>::boundingBox(Point<N>& minCorner, Point<N>& maxCorner) const {
   assert (points_.size() > 0);
   for (size_t i = 0; i < N; ++i) {
     minCorner[i] = std::numeric_limits<float>::max();
