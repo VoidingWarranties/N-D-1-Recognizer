@@ -11,7 +11,7 @@ class Recognizer {
   explicit Recognizer(int sample_size, int scale_size);
 
   void addTemplate(const std::string& name, const Path<N>& path);
-  std::string recognize(const Path<N>& path, int& score);
+  std::string recognize(const Path<N>& path, float& score);
 
  private:
   Path<N> resampleScaleTranslate(const Path<N>& path);
@@ -30,7 +30,7 @@ void Recognizer<N>::addTemplate(const std::string& name, const Path<N>& path) {
 }
 
 template <int N>
-std::string Recognizer<N>::recognize(const Path<N>& path, int& score) {
+std::string Recognizer<N>::recognize(const Path<N>& path, float& score) {
   Path<N> resampled_scaled_translated = resampleScaleTranslate(path);
   float min_distance = -1;
   std::string template_name = "";
