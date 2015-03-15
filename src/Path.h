@@ -12,6 +12,8 @@ namespace ND$1Recognizer {
 template <int N>
 class Path {
  public:
+  explicit Path(float uniform_scale_min_ratio = 0.25);
+
   void addPoint(const Point<N>& p) { points_.push_back(p); }
   int size() const { return points_.size(); }
   float length() const;
@@ -32,7 +34,12 @@ class Path {
 
  private:
   std::vector<Point<N> > points_;
+  const float uniform_scale_min_ratio_;
 };
+
+template <int N>
+Path<N>::Path(uniform_scale_min_ratio)
+    : uniform_scale_min_ratio_(uniform_scale_min_ratio) {}
 
 template <int N>
 float Path<N>::length() const {
@@ -121,12 +128,37 @@ Path<N> Path<N>::scale(float scale_size) const {
   Path<N> scaled_path;
   Point<N> min, max;
   boundingBox(min, max);
-  for (const auto& point : points_) {
-    Point<N> scaled_point;
-    for (std::size_t i = 0; i < N; ++i) {
-      scaled_point[i] = point[i] * scale_size / (max[i] - min[i]);
+
+  float max_length = 0;
+  float min_length = -1;
+  for (std::size_t i = 0; i < N; ++i) {
+    float length = max[i] - min[i];
+    if (length > max_length) {
+      max_length = length;
     }
-    scaled_path.addPoint(scaled_point);
+    if (length < min_length || min_length == -1) {
+      min_length = length;
+    }
+  }
+
+  if (min_length / max_length < uniform_scale_min_ratio_) {
+    // Scale uniformly.
+    for (const auto& point : points_) {
+      Point<N> scaled_point;
+      for (std::size_t i = 0; i < N; ++i) {
+        scaled_point[i] = point[i] * scale_size / max_length;
+      }
+      scaled_path.addPoint(scaled_point);
+    }
+  } else {
+    // Scale non-uniformly.
+    for (const auto& point : points_) {
+      Point<N> scaled_point;
+      for (std::size_t i = 0; i < N; ++i) {
+        scaled_point[i] = point[i] * scale_size / (max[i] - min[i]);
+      }
+      scaled_path.addPoint(scaled_point);
+    }
   }
   return scaled_path;
 }
