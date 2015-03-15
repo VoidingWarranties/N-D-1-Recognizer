@@ -34,11 +34,11 @@ class Path {
 
  private:
   std::vector<Point<N> > points_;
-  const float uniform_scale_min_ratio_;
+  float uniform_scale_min_ratio_;
 };
 
 template <int N>
-Path<N>::Path(uniform_scale_min_ratio)
+Path<N>::Path(float uniform_scale_min_ratio)
     : uniform_scale_min_ratio_(uniform_scale_min_ratio) {}
 
 template <int N>
