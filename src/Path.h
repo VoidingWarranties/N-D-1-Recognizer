@@ -17,6 +17,7 @@ class Path {
   const Point<N>& operator[](std::size_t i) const { return points_[i]; }
   Point<N>& operator[](std::size_t i) { return points_[i]; }
   Path<N> resample(int n) const;
+  Point<N> centroid() const;
 
   friend std::ostream& operator<<(std::ostream& out, const Path<N>& p) {
     for (const auto& point : p.points_) {
@@ -75,6 +76,20 @@ Path<N> Path<N>::resample(int n) const {
     resampled.addPoint(points_.back());
   }
   return resampled;
+}
+
+template <int N>
+Point<N> Path<N>::centroid() const {
+  Point<N> centroid_point;
+  for (std::size_t i = 0; i < N; ++i) {
+    centroid_point[i] = 0;
+  }
+  for (const auto& point : points_) {
+    for (std::size_t i = 0; i < N; ++i) {
+      centroid_point[i] += point[i] / float(points_.size());
+    }
+  }
+  return centroid_point;
 }
 
 template <int N>
