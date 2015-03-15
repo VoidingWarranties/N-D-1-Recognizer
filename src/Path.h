@@ -18,6 +18,13 @@ class Path {
   Point<N>& operator[](std::size_t i) { return points_[i]; }
   Path<N> resample(int n) const;
 
+  friend std::ostream& operator<<(std::ostream& out, const Path<N>& p) {
+    for (const auto& point : p.points_) {
+      out << point << "\n";
+    }
+    return out;
+  }
+
  private:
   std::vector<Point<N> > points_;
 };
