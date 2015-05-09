@@ -34,6 +34,13 @@ Path<2> GetPath() {
   return path;
 }
 
+enum class Shape {
+  Circle,
+  Square,
+  Triangle,
+  X
+};
+
 int main() {
   Point<2> origin;
   origin[0] = origin[1] = 0;
@@ -58,11 +65,11 @@ int main() {
   Path<2> x_template = GetPath();
   waitForX.join();
 
-  Recognizer<2> r(1000, 100);
-  r.addTemplate("circle", circle_template);
-  r.addTemplate("square", square_template);
-  r.addTemplate("triangle", triangle_template);
-  r.addTemplate("x", x_template);
+  Recognizer<2, Shape> r(1000, 100);
+  r.addTemplate(Shape::Circle, circle_template);
+  r.addTemplate(Shape::Square, square_template);
+  r.addTemplate(Shape::Triangle, triangle_template);
+  r.addTemplate(Shape::X, x_template);
 
   while (true) {
     std::cout << "Draw something" << std::endl;
@@ -71,7 +78,24 @@ int main() {
     waitForSomething.join();
 
     float score;
-    std::cout << r.recognize(something, score) << std::endl;
+    Shape recognized_template = r.recognize(something, score);
+    switch (recognized_template) {
+      case Shape::Circle:
+        std::cout << "Circle" << std::endl;
+        break;
+      case Shape::Square:
+        std::cout << "Square" << std::endl;
+        break;
+      case Shape::Triangle:
+        std::cout << "Triangle" << std::endl;
+        break;
+      case Shape::X:
+        std::cout << "X" << std::endl;
+        break;
+      default:
+        std::cout << "Unknown shape" << std::endl;
+        break;
+    }
     std::cout << score << std::endl;
   }
 
