@@ -78,7 +78,7 @@ int main() {
     waitForSomething.join();
 
     float score;
-    Shape recognized_template = r.recognize(something, score);
+    Shape recognized_template = r.recognizeMinDistance(something, score);
     switch (recognized_template) {
       case Shape::Circle:
         std::cout << "Circle" << std::endl;
